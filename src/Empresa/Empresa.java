@@ -18,6 +18,7 @@ public class Empresa {
     public static void añadirEmpleado() {
         boolean looping = true;
         int respuesta = 0;
+        StringBuilder sb = new StringBuilder();
         while (looping != false) {
             System.out.println("AÑADIR \n");
             int id = generarID();
@@ -33,24 +34,22 @@ public class Empresa {
             int salario = teclado.nextInt();
             Empleado emp = new Empleado(id, name, apellido, edad, dept, salario);
             lista_empleado.add(emp);
+            sb.append(emp.toString()).append(System.lineSeparator());
             System.out.println("Desea continuar agregando? \n Presiona 1 para contirunar  \n Presiona 2 para ir menu principal");
             respuesta = teclado.nextInt();
 
             if (respuesta == 2) {
                 looping = false;
             }
-            try {
-                FileWriter file = new FileWriter("lista_empleado.txt", true);
-                BufferedWriter bw = new BufferedWriter(file);
-
+            try(BufferedWriter bw = new BufferedWriter(new FileWriter("lista_empleado.txt", true)))
+            {
                 bw.write(emp.toString());
                 bw.newLine();
 
                 bw.close();
-
                 System.out.println("Written to file");
-            } catch (IOException E) {
-                System.out.println("nor found" + E);
+            } catch (IOException e) {
+                System.out.println("nor found" + e.getMessage());
             }
         }
     }
@@ -90,10 +89,8 @@ public class Empresa {
     }
     public static void mostrarEmpleado() {
 
-        try {
-            File fr = new File("lista_empleado.txt");
-            BufferedReader reader = new BufferedReader(new FileReader(fr));
-
+        try (BufferedReader reader = new BufferedReader(new FileReader(new File("lista_empleado.txt"))))
+        {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[]data = line.split("-");
@@ -113,34 +110,38 @@ public class Empresa {
     //Eliminar un empleado por su ID.
     public static void eliminarEmpleado() {
         Empleado emp = new Empleado();
-   ArrayList<Empleado> rewrite = new ArrayList<>();
+        File TempFile = new File("tempFile.txt");
+        File originalFile = new File("lista_empleado.txt");
+
         String line;
-        System.out.println("Introduzca el id del empleado que desea eliminar");
+         System.out.println("Introduzca el id del empleado que desea eliminar");
         int id = teclado.nextInt();
-        try(BufferedReader reader = new BufferedReader(new FileReader("lista_empleado.txt"))){
-            while((line = reader.readLine())!=null){
+        try (BufferedReader reader = new BufferedReader(new FileReader(originalFile));
+             BufferedWriter writer = new BufferedWriter(new FileWriter(TempFile))) {
+            while ((line = reader.readLine()) != null) {
                 String[] data = line.split("-");
                 emp.setId(parseInt(data[0]));
-                int empId  = emp.getId();
-                if(id == empId){
-
-                    rewrite.remove();
-                    break;
+                int empId = emp.getId();
+                if (id != empId) {
+                    writer.write(line + System.lineSeparator());
                 }
-             }
 
-            try(BufferedWriter writer = new BufferedWriter(new FileWriter("lista_empleado.txt"))){
-
-                writer.write(emp.toString());
-                System.out.println("Empleado Eliminado exitosamente");
-
-
-            }catch(IOException e){
-                System.out.println(e.getMessage());
             }
 
-        }catch (IOException e){
+            writer.close();
+            reader.close();
+
+        } catch (IOException e) {
             System.out.println(e.getMessage());
+        }
+        if (originalFile.delete()) {
+            if (TempFile.renameTo(originalFile)) {
+                System.out.println("Archivo actualizado correctamente");
+            } else {
+                System.out.println("Error al renombrar el archivo temporal");
+            }
+        } else {
+            System.out.println("Error al eliminar el archivo original");
         }
     }
 
@@ -148,28 +149,21 @@ public class Empresa {
     public static void calcularSalarioEmpleado() {
         int sum = 0;
                 int avg = 0;
-Empleado empleado = new Empleado();
-ArrayList<Integer> salario =  new ArrayList<>();
-        String line;
+                int count=0;
+                String line;
         try(BufferedReader reader = new BufferedReader(new FileReader("lista_empleado.txt"))) {
             while ((line = reader.readLine()) != null) {
                String[]data  = line.split("-");
                int salario1 = parseInt(data[5]);
-               empleado.setSalario(salario1);
-               int EmpSalario = empleado.getSalario();
-
-                 for(int i= 0; i<data.length; i++){
-                     salario.add(EmpSalario);
-                 }
-
+                 sum =+ salario1;
+                 count++;
             }
-            for(int i= 0; i< salario.size(); i++){
-                sum = sum + salario.get(i);
-            for(int j = 1; j < salario.size();j++){
-                avg= sum/j;
+            if(count > 0){
+                avg = sum/count;
+            }else{
+                System.out.println("theres no salaries to count");
             }
-            }
-            System.out.println(avg);
+            System.out.println("el salario promedio de los empleados es : "+avg);
         }catch(IOException e){
                 System.out.println(e.getMessage());
             }

@@ -69,13 +69,13 @@ public class Main {
 Descripción:
 Crea una aplicación Java avanzada que gestione la información de empleados en una empresa. La aplicación debe permitir:
 
-Añadir un nuevo empleado con los atributos: nombre, apellido, edad, departamento, y salario.
-Mostrar una lista de todos los empleados.
-Buscar un empleado por su ID.
-Actualizar la información de un empleado (nombre, apellido, edad, departamento, y salario).
-Eliminar un empleado por su ID.
-Calcular el salario promedio de todos los empleados.
-Mostrar la lista de empleados ordenada por nombre, edad, o salario (ascendente y descendente).
+[X]Añadir un nuevo empleado con los atributos: nombre, apellido, edad, departamento, y salario.
+[X]Mostrar una lista de todos los empleados.
+[X]Buscar un empleado por su ID.
+[]Actualizar la información de un empleado (nombre, apellido, edad, departamento, y salario).
+[]Eliminar un empleado por su ID.
+[X]Calcular el salario promedio de todos los empleados.
+[x]Mostrar la lista de empleados ordenada por nombre, edad, o salario (ascendente y descendente).
 Requisitos:
 
     [X]*Utiliza una clase Empleado.Empleado con los atributos mencionados y métodos para obtener y establecer los valores de estos atributos.
