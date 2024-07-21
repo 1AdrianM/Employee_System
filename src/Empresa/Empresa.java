@@ -95,7 +95,11 @@ public class Empresa {
             while ((line = reader.readLine()) != null) {
                 String[]data = line.split("-");
                 Empleado emp = new Empleado(parseInt(data[0]), data[1], data[2],parseInt(data[3]), data[4],  parseInt(data[5]));
-                System.out.println(emp.EmptoString());
+                if(emp.EmptoString().equals("")){
+                    System.out.println("no employees to show");
+                }else {
+                    System.out.println(emp.EmptoString());
+                }
             }
         } catch (IOException e) {
             System.out.println("no encontrado" + e);
@@ -107,6 +111,7 @@ public class Empresa {
           File OriginalFile = new File("lista_empleado.txt");
           File tempFile = new File("tempFile.txt");
         String newEmp;
+        int idPersistance = 0;
         int empId = 0;
         String Line;
         System.out.println("Introduce el id del empleado a Actualizar");
@@ -117,7 +122,7 @@ public class Empresa {
             while((Line = reader.readLine()) != null) {
                 String[] data = Line.split("-");
 
-                 empId = parseInt(data[0]);
+                empId = parseInt(data[0]);
                 if (id != empId) {
                     writer.write(Line+System.lineSeparator());
                     continue;
@@ -136,7 +141,7 @@ public class Empresa {
             System.out.println("introduce el salario");
             int salario = teclado.nextInt();
 
-            Empleado empleado= new Empleado(empId,name,apellido,edad,dept,salario );
+            Empleado empleado= new Empleado(id,name,apellido,edad,dept,salario );
             newEmp =empleado.toString();
             writer.write(newEmp);
             System.out.println(newEmp);
