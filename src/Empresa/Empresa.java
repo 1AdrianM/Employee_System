@@ -104,6 +104,54 @@ public class Empresa {
 
     //Actualizar la información de un empleado (nombre, apellido, edad, departamento, y salario).
     public static void actualizarEmpleado() {
+          File OriginalFile = new File("lista_empleado.txt");
+          File tempFile = new File("tempFile.txt");
+        String newEmp;
+        int empId = 0;
+        String Line;
+        System.out.println("Introduce el id del empleado a Actualizar");
+        int id = teclado.nextInt();
+          try(BufferedReader reader = new BufferedReader(new FileReader(OriginalFile));
+        BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile, true)))
+        {
+            while((Line = reader.readLine()) != null) {
+                String[] data = Line.split("-");
+
+                 empId = parseInt(data[0]);
+                if (id != empId) {
+                    writer.write(Line+System.lineSeparator());
+                    continue;
+
+                }
+            }
+            System.out.println("ACTUALIZAR");
+            System.out.println("Introduce el nombre del empleado");
+            String name = teclado.next();
+            System.out.println("introduce el apellido");
+            String apellido = teclado.next();
+            System.out.println("introduce la edad");
+            int edad = teclado.nextInt();
+            System.out.println("introduce el departamento");
+            String dept = teclado.next();
+            System.out.println("introduce el salario");
+            int salario = teclado.nextInt();
+
+            Empleado empleado= new Empleado(empId,name,apellido,edad,dept,salario );
+            newEmp =empleado.toString();
+            writer.write(newEmp);
+            System.out.println(newEmp);
+        }catch (IOException e){
+            System.out.println("Error: "+e.getMessage());
+        }
+        if (OriginalFile.delete()) {
+            if (tempFile.renameTo(OriginalFile)) {
+                System.out.println("Archivo actualizado correctamente");
+            } else {
+                System.out.println("Error al renombrar el archivo temporal");
+            }
+        } else {
+            System.out.println("Error al eliminar el archivo original");
+        }
 
     }
 
@@ -123,10 +171,10 @@ public class Empresa {
                 emp.setId(parseInt(data[0]));
                 int empId = emp.getId();
                 if (id != empId) {
-                    writer.write(line + System.lineSeparator());
-                }
 
+                }
             }
+
 
             writer.close();
             reader.close();
